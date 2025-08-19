@@ -1,64 +1,218 @@
-import React, { useState } from 'react';
-import CropDisplay from './components/CropDisplay';
-import YieldChart from './components/YieldChart';
-import FarmMap from './components/FarmMap';
-import CropService from './services/CropService';
-import './styles.css';
+import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 
-function App() {
-  const [recommendations, setRecommendations] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
+// Components
+import InputField from "./components/InputField/InputField";
+import PredictionResult from "./components/PredictionResult/PredictionResult";
+import Marquee from "react-fast-marquee";
 
-  const handleGetRecommendations = (soilConditions) => {
-    setIsLoading(true);
-    
-    // Simulate processing delay
-    setTimeout(() => {
-      const results = CropService.getTopRecommendations(soilConditions);
-      setRecommendations(results);
-      setIsLoading(false);
-    }, 800);
-  };
+// Recommendations Page
+function RecommendationsPage({ results }) {
+  const navigate = useNavigate();
+
+  if (!results.length) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-600">
+        <p>No recommendations yet. Please go back and enter values.</p>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-primary-700 text-white py-6 shadow-md">
-        <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold text-center">🌾 Crop Yield Predictor</h1>
-          <p className="text-center mt-2 text-primary-100">
-            Get the best crop recommendations for your soil
-          </p>
-        </div>
-      </header>
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-6 sm:p-8">
+        <h2 className="text-2xl font-bold mb-6 text-agri-green-700 text-center">
+          Top Recommended Crops
+        </h2>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Column - Form */}
-          <div className="lg:w-2/3">
-            <CropDisplay 
-              onGetRecommendations={handleGetRecommendations} 
-              isLoading={isLoading}
-            />
-          </div>
+        <PredictionResult results={results} />
 
-          {/* Right Column - Results */}
-          <div className="lg:w-1/3 space-y-6">
-            <YieldChart cropData={recommendations} />
-            <FarmMap />
-          </div>
+        <div className="mt-6 text-center">
+          <button
+            onClick={() => navigate("/")}
+            className="px-6 py-2 bg-agri-green-500 text-white rounded-lg shadow hover:bg-agri-green-600 transition"
+          >
+            ⬅ Back to Form
+          </button>
         </div>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-primary-800 text-white py-4 mt-8">
-        <div className="container mx-auto px-4 text-center text-sm">
-          <p>© {new Date().getFullYear()} AgriTech Solutions. All rights reserved.</p>
-        </div>
-      </footer>
+      </div>
     </div>
   );
 }
 
+// Main App
+function App() {
+  const [cropData, setCropData] = useState([]);
+  const [formData, setFormData] = useState({
+    nitrogen: "",
+    phosphorus: "",
+    potassium: "",
+    ph: "",
+    rainfall: "",
+    temperature: "",
+  });
+  const [results, setResults] = useState([]);
+  const navigate = useNavigate();
+
+  // Fetch cropData from backend on load
+  useEffect(() => {
+    fetch("http://localhost:5000/api/crops")
+      .then((res) => res.json())
+      .then((data) => setCropData(data))
+      .catch((err) => console.error("Failed to fetch crop data:", err));
+  }, []);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || "" }));
+  };
+
+  const calculateScore = (crop, input) => {
+    let score = 0;
+    const totalConditions = Object.keys(crop.idealConditions).length;
+
+    for (const [key, range] of Object.entries(crop.idealConditions)) {
+      const value = input[key];
+      if (value >= range.min && value <= range.max) {
+        score += 1;
+      } else {
+        const distance = Math.min(
+          Math.abs(value - range.min),
+          Math.abs(value - range.max)
+        );
+        const penalty = distance / (range.max - range.min);
+        score += 1 - penalty;
+      }
+    }
+
+    return score / totalConditions;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Validate all fields
+    for (const value of Object.values(formData)) {
+      if (value === "") {
+        alert("Please fill all fields");
+        return;
+      }
+    }
+
+    // Calculate scores
+    const cropScores = cropData.map((crop) => ({
+      crop,
+      score: calculateScore(crop, formData),
+    }));
+
+    cropScores.sort((a, b) => b.score - a.score);
+
+    setResults(cropScores.slice(0, 3));
+
+    // Navigate to recommendations page
+    navigate("/recommendations");
+  };
+
+  return (
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              {/* Heading */}
+              <div className="text-center mb-6">
+                <h1 className="text-4xl font-bold text-agri-green-800 mb-2">
+                  Crop Yield Prediction System
+                </h1>
+
+                {/* ✅ Marquee Added Here */}
+                <Marquee
+                  className="text-red-600 font-medium text-lg"
+                  gradient={false}
+                  speed={50}
+                >
+                   Calculation is based on the data you enter. Keep the data
+                  accurate for better results.
+                </Marquee>
+              </div>
+
+              {/* Form */}
+              <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
+                <form onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <InputField
+                      label="Nitrogen (N) content"
+                      name="nitrogen"
+                      value={formData.nitrogen}
+                      onChange={handleChange}
+                      unit="kg/ha"
+                      infoText="Enter nitrogen content in kg/ha based on your soil condition. Example: 50"
+                    />
+                    <InputField
+                      label="Phosphorus (P) content"
+                      name="phosphorus"
+                      value={formData.phosphorus}
+                      onChange={handleChange}
+                      unit="kg/ha"
+                      infoText="Enter phosphorus content in kg/ha. Example: 30"
+                    />
+                    <InputField
+                      label="Potassium (K) content"
+                      name="potassium"
+                      value={formData.potassium}
+                      onChange={handleChange}
+                      unit="kg/ha"
+                      infoText="Enter potassium content in kg/ha. Example: 40"
+                    />
+                    <InputField
+                      label="Soil pH level"
+                      name="ph"
+                      value={formData.ph}
+                      onChange={handleChange}
+                      unit="pH"
+                      infoText="Enter soil pH value (0-14) based on your soil Example: 6.5"
+                    />
+                    <InputField
+                      label="Annual Rainfall"
+                      name="rainfall"
+                      value={formData.rainfall}
+                      onChange={handleChange}
+                      unit="mm"
+                      infoText="Enter rainfall in millimeters per year based on your locality.Example: 800"
+                    />
+                    <InputField
+                      label="Average Temperature"
+                      name="temperature"
+                      value={formData.temperature}
+                      onChange={handleChange}
+                      unit="°C/°F"
+                      infoText="Enter average temperature based on your locality.Example: 25°C/77°F"
+                    />
+                  </div>
+
+                  <div className="mt-8 text-center">
+                    <button
+                      type="submit"
+                      className="px-8 py-3 bg-agri-green-500 text-white font-medium rounded-lg hover:bg-agri-green-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-agri-green-500 focus:ring-offset-2"
+                    >
+                      Predict Yield
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        }
+      />
+      <Route
+        path="/recommendations"
+        element={<RecommendationsPage results={results} />}
+      />
+    </Routes>
+  );
+}
+
 export default App;
+
+
