@@ -1,5 +1,5 @@
 import express from "express";
-import { cropData } from "../data/cropData.js";
+import cropData from "../data/cropData.js";
 
 const router = express.Router();
 

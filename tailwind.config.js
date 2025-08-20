@@ -1,20 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",  // 👈 Important for CRA
+    "./src/**/*.{js,jsx,ts,tsx}", // ✅ important for React
   ],
   theme: {
-    extend: {
-      colors: {
-        "agri-green": {
-          100: "#e6f7e6",
-          500: "#28a745",
-          700: "#1e7e34",
-        },
-      },
-    },
+    extend: {},
   },
   plugins: [],
 }
-
 

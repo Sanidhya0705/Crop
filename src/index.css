@@ -2,8 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Optional global styles */
-body {
-  @apply bg-agri-green-100;
-}
 

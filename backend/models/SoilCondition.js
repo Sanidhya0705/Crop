@@ -1,14 +1,13 @@
-// backend/models/SoilCondition.js
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const soilConditionSchema = new mongoose.Schema({
+  nitrogen: { type: Number, required: true },
+  phosphorus: { type: Number, required: true },
+  potassium: { type: Number, required: true },
+  ph: { type: Number, required: true },
   rainfall: { type: Number, required: true },
   temperature: { type: Number, required: true },
-  humidity: { type: Number, required: true },
-  soilType: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  timestamp: { type: Date, default: Date.now }
 });
 
-const SoilCondition = mongoose.model("SoilCondition", soilConditionSchema);
-
-export default SoilCondition;
+export default mongoose.model('SoilCondition', soilConditionSchema);
