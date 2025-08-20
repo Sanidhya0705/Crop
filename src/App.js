@@ -155,7 +155,7 @@ function App() {
                   gradient={false}
                   speed={60}
                 >
-                  ⚠️ Calculation is based on the data you enter. Keep the data
+                   Calculation is based on the data you enter. Keep the data
                   accurate for better results.
                 </Marquee>
               </div>
@@ -170,7 +170,7 @@ function App() {
                       value={formData.nitrogen}
                       onChange={handleChange}
                       unit="kg/ha"
-                      infoText="Enter nitrogen content in kg/ha based on your soil condition. Example: 50"
+                      infoText="Enter nitrogen content in kg/ha based on your soil . Example: 50"
                     />
                     <InputField
                       label="Phosphorus (P) content"
@@ -178,7 +178,7 @@ function App() {
                       value={formData.phosphorus}
                       onChange={handleChange}
                       unit="kg/ha"
-                      infoText="Enter phosphorus content in kg/ha. Example: 30"
+                      infoText="Enter phosphorus content in kg/ha based on your soil Example: 30"
                     />
                     <InputField
                       label="Potassium (K) content"
@@ -186,7 +186,7 @@ function App() {
                       value={formData.potassium}
                       onChange={handleChange}
                       unit="kg/ha"
-                      infoText="Enter potassium content in kg/ha. Example: 40"
+                      infoText="Enter potassium content in kg/ha based on your soil.Example: 40"
                     />
                     <InputField
                       label="Soil pH level"
@@ -194,7 +194,7 @@ function App() {
                       value={formData.ph}
                       onChange={handleChange}
                       unit="pH"
-                      infoText="Enter soil pH value (0-14) Example: 6.5"
+                      infoText="Enter soil pH value (0-14)  based on particular soil.Example: 6.5"
                     />
                     <InputField
                       label="Annual Rainfall"
@@ -202,7 +202,7 @@ function App() {
                       value={formData.rainfall}
                       onChange={handleChange}
                       unit="mm"
-                      infoText="Enter rainfall in millimeters per year. Example: 800"
+                      infoText="Enter rainfall in millimeters per year based on your locality.Example: 800"
                     />
                     <InputField
                       label="Average Temperature"
@@ -210,7 +210,7 @@ function App() {
                       value={formData.temperature}
                       onChange={handleChange}
                       unit="°C/°F"
-                      infoText="Enter average temperature. Example: 25°C/77°F"
+                      infoText="Enter average temperature in celsius/farheinheit.Example: 25°C/77°F"
                     />
                   </div>
 
