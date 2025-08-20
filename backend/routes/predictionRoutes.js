@@ -1,12 +1,6 @@
 import express from "express";
-import cropData from "../data/cropData.js";
 
 const router = express.Router();
-
-// GET all crops
-router.get("/crops", (req, res) => {
-  res.json(cropData);
-});
 
 // POST prediction
 router.post("/predict", (req, res) => {

@@ -57,11 +57,21 @@ function App() {
   // Fetch cropData from backend on load
   useEffect(() => {
     fetch("http://localhost:5000/api/crops")
-      .then((res) => res.json())
-      .then((data) => setCropData(data))
-      .catch((err) => console.error("Failed to fetch crop data:", err));
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Crop data received:", data); // Debug log
+        setCropData(data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch crop data:", err);
+        setCropData([]); // Fallback to empty array
+      });
   }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || "" }));

@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// ✅✅✅ CHANGE ORDER - CORS FIRST ✅✅✅
 app.use(cors());
 app.use(express.json());
 
@@ -19,12 +19,9 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ Connected to MongoDB Atlas'))
   .catch(err => console.error('❌ MongoDB connection error:', err));
 
-// Routes
-app.use('/', predictionRoutes);
-app.use('/', soilRoutes);
-
-// Crop data endpoint
+// ✅✅✅ ADD CROPS ENDPOINT BEFORE OTHER ROUTES ✅✅✅
 app.get('/api/crops', (req, res) => {
+  console.log('✅ /api/crops endpoint called');
   const cropData = [
     {
       name: "Rice",
@@ -141,6 +138,9 @@ app.get('/api/crops', (req, res) => {
   ];
   res.json(cropData);
 });
+
+app.use('/', predictionRoutes);
+app.use('/', soilRoutes);
 
 // Basic health check route
 app.get('/api/health', (req, res) => {
