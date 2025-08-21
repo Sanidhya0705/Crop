@@ -6,7 +6,7 @@ import ReactTooltip from "react-tooltip";
 const InputField = ({ label, name, value, onChange, placeholder, infoText }) => {
   return (
     <div className="mb-4">
-      <label className="block text-gray-700 font-medium mb-2 capitalize flex items-center">
+      <label className="block text-gray-700 font-bold mb-2 capitalize flex items-center">
         <span>{label}</span>
         {/* Info icon right next to label */}
         {infoText && (
@@ -14,7 +14,7 @@ const InputField = ({ label, name, value, onChange, placeholder, infoText }) => 
             <AiOutlineInfoCircle
               data-tip
               data-for={`tooltip-${name}`}
-              className="text-gray-500 cursor-pointer ml-2"
+              className="text-black-500 cursor-pointer ml-2"
             />
             <ReactTooltip id={`tooltip-${name}`} place="right" effect="solid">
               {infoText}

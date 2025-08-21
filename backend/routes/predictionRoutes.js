@@ -3,8 +3,9 @@ import express from "express";
 const router = express.Router();
 
 // POST prediction
-router.post("/predict", (req, res) => {
+router.post("/recommendation", (req, res) => {
   const input = req.body; // { nitrogen, phosphorus, potassium, ph, rainfall, temperature }
+
 
   const calculateScore = (crop, input) => {
     let score = 0;
