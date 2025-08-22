@@ -19,8 +19,13 @@ function RecommendationsPage({ results }) {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-green-50 to-green-100">
-      <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-green-200">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
+      style={{
+        backgroundImage:
+          "url('https://cdn-ilbhofd.nitrocdn.com/GylVsJfULsgVDWUCFBufHmCoRzeNFaNW/assets/images/optimized/rev-a5eadd5/www.morningagclips.com/wp-content/uploads/2024/09/Machine-Learning-and-Crop-Yield-Prediction-A-New-Era-for-Agriculture-2-720x400.png ')",
+      }}>
+        <div className="flex items-center justify-center min-h-screen">
+      <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg text-black ">
         <h2 className="text-3xl font-bold mb-6 text-green-800 text-center">
           🌱 Top Recommended Crops
         </h2>
@@ -35,6 +40,7 @@ function RecommendationsPage({ results }) {
             ⬅ Back to Form
           </button>
         </div>
+      </div>
       </div>
     </div>
   );
