@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import PredictionResult from "./components/PredictionResult/PredictionResult"; // ✅ Import added
 
 export default function RecommendationsPage() {
   const location = useLocation();
@@ -35,6 +36,9 @@ export default function RecommendationsPage() {
         ))}
       </ul>
 
+      {/* ✅ Added PredictionResult here */}
+      <PredictionResult results={location.state?.results || []} />
+
       <div className="text-center">
         <button
           onClick={() => navigate("/")} // Go back to HomePage form
@@ -46,6 +50,3 @@ export default function RecommendationsPage() {
     </div>
   );
 }
-
-
-

@@ -6,6 +6,9 @@ import InputField from "./components/InputField/InputField";
 import PredictionResult from "./components/PredictionResult/PredictionResult";
 import Marquee from "react-fast-marquee";
 
+// ✅ Import background image from assets
+import bgImage from "./assets/bg.png";
+
 // Recommendations Page
 function RecommendationsPage({ results }) {
   const navigate = useNavigate();
@@ -19,28 +22,26 @@ function RecommendationsPage({ results }) {
   }
 
   return (
-    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://cdn-ilbhofd.nitrocdn.com/GylVsJfULsgVDWUCFBufHmCoRzeNFaNW/assets/images/optimized/rev-a5eadd5/www.morningagclips.com/wp-content/uploads/2024/09/Machine-Learning-and-Crop-Yield-Prediction-A-New-Era-for-Agriculture-2-720x400.png ')",
-      }}>
-        <div className="flex items-center justify-center min-h-screen">
-      <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg text-black ">
-        <h2 className="text-3xl font-bold mb-6 text-green-800 text-center">
-          🌱 Top Recommended Crops
-        </h2>
-
-        <PredictionResult results={results} />
-
-        <div className="mt-6 text-center">
-          <button
-            onClick={() => navigate("/")}
-            className="px-6 py-2 bg-green-500 text-white font-medium rounded-lg shadow-md hover:bg-green-600 transition transform hover:scale-105"
-          >
-            ⬅ Back to Form
-          </button>
+    <div
+      className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
+      style={{ backgroundImage: `url(${bgImage})` }}
+    >
+      <div className="flex items-center justify-center min-h-screen">
+        {/* ✅ Changed to light black transparent box */}
+        <div className="max-w-4xl mx-auto bg-black/30 p-8 rounded-2xl shadow-lg text-white">
+          <h2 className="text-3xl font-bold mb-6 text-green-300 text-center">
+            🌱 Top Recommended Crops
+          </h2>
+           <PredictionResult results={results} />
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => navigate("/")}
+              className="px-6 py-2 bg-green-500 text-white font-medium rounded-lg shadow-md hover:bg-green-600 transition transform hover:scale-105"
+            >
+              ⬅ Back to Form
+            </button>
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
@@ -78,9 +79,13 @@ function App() {
         setCropData([]); // Fallback to empty array
       });
   }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: parseFloat(value) || "" }));
+    setFormData((prev) => ({
+      ...prev,
+      [name]: parseFloat(value) || "",
+    }));
   };
 
   const calculateScore = (crop, input) => {
@@ -100,14 +105,12 @@ function App() {
         score += 1 - penalty;
       }
     }
-
     return score / totalConditions;
   };
 
-  const handleSubmit =async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-     console.log("Crop data received:", cropData);
+    console.log("Crop data received:", cropData);
 
     // Validate all fields
     for (const value of Object.values(formData)) {
@@ -116,17 +119,18 @@ function App() {
         return;
       }
     }
+
     console.log("FormData:", formData);
 
     try {
-    await fetch("http://localhost:5000/api/soil", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-  } catch (err) {
-    console.error("Failed to save soil data:", err);
-  }
+      await fetch("http://localhost:5000/api/soil", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+    } catch (err) {
+      console.error("Failed to save soil data:", err);
+    }
 
     // Calculate scores
     const cropScores = cropData.map((crop) => ({
@@ -135,7 +139,6 @@ function App() {
     }));
 
     cropScores.sort((a, b) => b.score - a.score);
-
     setResults(cropScores.slice(0, 3));
 
     // Navigate to recommendations page
@@ -147,31 +150,30 @@ function App() {
       <Route
         path="/"
         element={
-          <div  className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
-      style={{
-        backgroundImage:
-          "url('https://cdn-ilbhofd.nitrocdn.com/GylVsJfULsgVDWUCFBufHmCoRzeNFaNW/assets/images/optimized/rev-a5eadd5/www.morningagclips.com/wp-content/uploads/2024/09/Machine-Learning-and-Crop-Yield-Prediction-A-New-Era-for-Agriculture-2-720x400.png ')",
-      }}>
+          <div
+            className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-cover bg-center"
+            style={{ backgroundImage: `url(${bgImage})` }}
+          >
             <div className="max-w-4xl mx-auto">
               {/* Heading */}
               <div className="text-center mb-6">
                 <h1 className="text-4xl font-extrabold text-green-800 mb-2 drop-shadow-md">
                   🌿 Crop Yield Prediction System
                 </h1>
-
                 {/* ✅ Marquee Added Here */}
                 <Marquee
                   className="text-red-600 font-medium text-lg bg-yellow-100 px-2 py-1 rounded shadow-sm"
                   gradient={false}
                   speed={60}
                 >
-                   Calculation is based on the data you enter. Keep the data
+                  Calculation is based on the data you enter. Keep the data
                   accurate for better results.
                 </Marquee>
               </div>
 
               {/* Form */}
-              <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-lg text-black">
+              {/* ✅ Changed to light black transparent box */}
+              <div className="bg-black/30 p-8 rounded-2xl shadow-lg text-white">
                 <form onSubmit={handleSubmit}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-black">
                     <InputField
@@ -204,7 +206,7 @@ function App() {
                       value={formData.ph}
                       onChange={handleChange}
                       unit="pH"
-                      infoText="Enter soil pH value (0-14)  based on particular soil.Example: 6.5"
+                      infoText="Enter soil pH value (0-14) based on particular soil.Example: 6.5"
                     />
                     <InputField
                       label="Annual Rainfall"
@@ -223,7 +225,6 @@ function App() {
                       infoText="Enter average temperature in celsius/farheinheit.Example: 25°C/77°F"
                     />
                   </div>
-
                   <div className="mt-8 text-center">
                     <button
                       type="submit"

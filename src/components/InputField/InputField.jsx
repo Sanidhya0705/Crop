@@ -6,7 +6,7 @@ import ReactTooltip from "react-tooltip";
 const InputField = ({ label, name, value, onChange, placeholder, infoText }) => {
   return (
     <div className="mb-4">
-      <label className="block text-gray-700 font-bold mb-2 capitalize flex items-center">
+      <label className="block text-sm font-medium text-white mb-1 capitalize flex items-center">
         <span>{label}</span>
         {/* Info icon right next to label */}
         {infoText && (
@@ -22,7 +22,6 @@ const InputField = ({ label, name, value, onChange, placeholder, infoText }) => 
           </>
         )}
       </label>
-
       <input
         type="number"
         name={name}
