@@ -6,17 +6,17 @@ const CropCard = ({ crop, score, rank }) => {
         src={`http://localhost:5000${crop.image}`}
         alt={crop.name}
         className="w-full h-48 object-cover"
-/>
+        />
         <div className="absolute top-2 right-2 bg-agri-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
           #{rank}
         </div>
       </div>
       <div className="p-4">
-        <h3 className="text-xl font-bold text-agri-green-800 mb-2">{crop.name}</h3>
+        <h3 className="text-xl font-bold text-black mb-2">{crop.name}</h3>
         <div className="flex items-center justify-between">
           <span className="text-gray-600">Suitability:</span>
-          <span className="text-lg font-bold text-agri-green-600">
-            {Math.round(score * 100)}%
+          <span className="text-lg font-bold text-green-600">
+            {score ? Math.round(score * 100) : 0}%
           </span>
         </div>
       </div>

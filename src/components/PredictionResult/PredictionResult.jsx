@@ -12,7 +12,7 @@ const PredictionResult = ({ results }) => {
           <CropCard
             key={result.crop.name}
             crop={result.crop}
-            score={result.score}
+            score={result.score !== undefined ? result.score : 0} // ✅ Added fallback for score
             rank={index + 1}
           />
         ))}
