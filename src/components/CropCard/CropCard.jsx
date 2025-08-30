@@ -23,5 +23,4 @@ const CropCard = ({ crop, score, rank }) => {
     </div>
   );
 };
-
 export default CropCard;
